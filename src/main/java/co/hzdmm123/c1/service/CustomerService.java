@@ -1,5 +1,6 @@
 package co.hzdmm123.c1.service;
 
+import co.hzdmm123.c1.helper.DatabaseHelper;
 import co.hzdmm123.c1.model.Customer;
 import co.hzdmm123.c1.util.PropsUtil;
 import org.slf4j.Logger;
@@ -16,12 +17,12 @@ import java.util.Properties;
  */
 public class CustomerService {
 
-    private static  final Logger LOGGER = LoggerFactory.getLogger(CustomerService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerService.class);
 
-    private static final  String DRIVER;
-    private static final  String URL;
-    private static final  String USERNAME;
-    private static final  String PASSWORD;
+    private static final String DRIVER;
+    private static final String URL;
+    private static final String USERNAME;
+    private static final String PASSWORD;
 
     static {
         Properties conf = PropsUtil.loadProps("config.properties");
@@ -30,15 +31,16 @@ public class CustomerService {
         USERNAME = conf.getProperty("jdbc.username");
         PASSWORD = conf.getProperty("jdbc.password");
 
-        try{
+        try {
             Class.forName(DRIVER);
-        }catch (ClassNotFoundException e){
-            LOGGER.error("can not load jdbc driver",e);
+        } catch (ClassNotFoundException e) {
+            LOGGER.error("can not load jdbc driver", e);
         }
     }
+
     //获取客户列表
-    public List<Customer>   getCustomerList(){
-        Connection conn = null;
+    public List<Customer> getCustomerList() {
+   /*     Connection conn = null;
         List<Customer>  customerList = new ArrayList<Customer>();
         try{
 
@@ -68,26 +70,36 @@ public class CustomerService {
             }
         }
 
-        return customerList;
+        return customerList;*/
+
+        Connection connection = DatabaseHelper.getConnection();
+        try {
+            String sql = "SELECT * FROM customer";
+            return DatabaseHelper.queryEntityList(Customer.class,sql);
+        }finally {
+            DatabaseHelper.closeConnection();
+        }
+
+
     }
 
     //获取客户
-    public Customer getCustomer(long id){
-        return  null;
+    public Customer getCustomer(long id) {
+        return null;
     }
 
     //创建客户
-    public boolean createCustomer(Map<String,Object> fieldMap){
+    public boolean createCustomer(Map<String, Object> fieldMap) {
         return false;
     }
 
     //变更客户
-    public boolean updateCustomer(long id,Map<String,Object> fieldMap){
+    public boolean updateCustomer(long id, Map<String, Object> fieldMap) {
         return false;
     }
 
     //删除用户
-    public boolean deleteCustomer(long id){
+    public boolean deleteCustomer(long id) {
         return false;
     }
 }
