@@ -2,6 +2,7 @@ package co.hzdmm123.c1.helper;
 
 import co.hzdmm123.c1.util.PropsUtil;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +83,7 @@ public class DatabaseHelper {
             }
         }
     }
-
+    //查询实体列表
     public static <T> List<T> queryEntityList( Class<T> entityClass,String sql,Object ...params){
         List<T> entityList;
         try {
@@ -97,5 +98,19 @@ public class DatabaseHelper {
 
         return entityList;
 
+    }
+    //查询单个实体
+    public static <T> T queryEntity(Class<T> entityClass,String sql,Object ...params){
+        T entity;
+        try{
+            Connection conn = getConnection();
+            entity = QUERY_RUNNER.query(conn,sql,new BeanHandler<T>(entityClass));
+        }catch (SQLException e){
+            LOGGER.error("query entity failure",e);
+            throw  new RuntimeException();
+        }finally {
+            closeConnection();
+        }
+        return entity;
     }
 }

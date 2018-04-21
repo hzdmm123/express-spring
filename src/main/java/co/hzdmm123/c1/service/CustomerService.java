@@ -72,6 +72,7 @@ public class CustomerService {
 
         return customerList;*/
 
+/*
         Connection connection = DatabaseHelper.getConnection();
         try {
             String sql = "SELECT * FROM customer";
@@ -79,7 +80,9 @@ public class CustomerService {
         }finally {
             DatabaseHelper.closeConnection();
         }
-
+*/
+        String sql = "select * from customer";
+        return DatabaseHelper.queryEntityList(Customer.class,sql);
 
     }
 
